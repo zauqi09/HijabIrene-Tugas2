@@ -93,11 +93,6 @@ img {
 
 /* Yoga CSS */
 .hub-kami {
-  width: 100%;
-  height: 90vh;
-  background-image: url("https://vanillahijab.com/media/weltpixel/owlcarouselslider/images/w/e/web_banner_no_clikc_buttom.jpg");
-  background-attachment: cover;
-  display: inline-block;
   font-family: "Graphik-Medium";
 }
 
@@ -121,9 +116,46 @@ img {
   color: #777777;
 }
 
-.btn {
+.btn-hub {
   background-color: #7952b3;
   color: white;
   border-radius: 10px;
 }
 /* End of Yoga CSS */
+
+/* Marcel */
+.login {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}       
+.skip-nav-login{
+margin-top:72px;
+}    
+
+/* Iren */
+
+.btn-tentang {
+  background: #fbf7f0;
+  color: #686d76;
+  size: initial;
+  width: 100%;
+  height: max-content;
+}
+#hidden{
+  visibility: hidden;
+}
+.btn-tentang:hover{
+  background: #8675a9;
+  color: #fff0f0;
+}
+.btn-tentang:hover #hidden{
+  visibility: visible;
+}
+
+.sizefix{
+  width: 90px;
+}
