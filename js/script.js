@@ -7,18 +7,18 @@ var status
 
 function nav() {
     if (listSessionUser.length==1) {
-        thisNav = `<li class="nav-item">
-        <a class="nav-link ${status}" href="#beranda" onclick="show('beranda','tentang','hubungi-kami','masuk','list-user'); status=' active'">Beranda
+        thisNav = `<li class="nav-item ">
+        <a class="nav-link active" href="#beranda" onclick="show('beranda','tentang','hubungi-kami','masuk','list-user'); ">Beranda
             </a>
         </li>
         <li class="nav-item ">
-            <a class="nav-link ${status}" href="#tentang" onclick="show('tentang','beranda','hubungi-kami','masuk','list-user'); status=' active'">Tentang</a>
+            <a class="nav-link" href="#tentang" onclick="show('tentang','beranda','hubungi-kami','masuk','list-user'); ">Tentang</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link ${status}" href="#hubungi-kami" onclick="show('hubungi-kami','tentang','beranda','masuk','list-user'); status=' active'">Hubungi Kami</a>
+            <a class="nav-link" href="#hubungi-kami" onclick="show('hubungi-kami','tentang','beranda','masuk','list-user'); ">Hubungi Kami</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link ${status}" href="#list-user" onclick="show('list-user','tentang','beranda','masuk','hubungi-kami');showData(); status=' active'">List User</a>
+            <a class="nav-link" href="#list-user" onclick="show('list-user','tentang','beranda','masuk','hubungi-kami');showData(); ">List User</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="#logout" onclick="Logout();nav();window.alert('Anda telah logout!')">Logout</a>
@@ -26,7 +26,7 @@ function nav() {
         `
     }
     else {
-        thisNav =`<li class="nav-item">
+        thisNav =`<li class="nav-item ">
         <a class="nav-link active" href="#beranda" onclick="show('beranda','hubungi-kami','tentang','masuk','daftar');">Beranda
             </a>
         </li>
@@ -34,17 +34,32 @@ function nav() {
             <a class="nav-link" href="#tentang" onclick="show('tentang','hubungi-kami','beranda','masuk','daftar');">Tentang</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#hubungi-kami" onclick="show('hubungi-kami','tentang','beranda','masuk','daftar')";>Hubungi Kami</a>
+            <a class="nav-link" href="#hubungi-kami" onclick="show('hubungi-kami','tentang','beranda','masuk','daftar');" >Hubungi Kami</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#masuk" onclick="show('masuk','hubungi-kami','tentang','beranda','daftar')";>Masuk</a>
+            <a class="nav-link" href="#masuk" onclick="show('masuk','hubungi-kami','tentang','beranda','daftar');">Masuk</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#daftar" onclick="show('daftar','hubungi-kami','tentang','beranda','masuk')";>Daftar</a>
+            <a class="nav-link" href="#daftar" onclick="show('daftar','hubungi-kami','tentang','beranda','masuk');">Daftar</a>
         </li>`
     }
     navActive.innerHTML = thisNav
+
+    var btnContainer = document.getElementById("navBar");
+
+    // Get all buttons with class="btn" inside the container
+    var btns = btnContainer.getElementsByClassName("nav-item");
+
+    // Loop through the buttons and add the active class to the current/clicked button
+    for (var i = 0; i < btns.length; i++) {
+        btns[i].addEventListener("click", function() {
+        var current = document.getElementsByClassName("active");
+        current[0].className = current[0].className.replace(" active", "");
+        this.children[0].className += " active";
+    });
+    } 
 }
+
 
 function show(shown,hidden1,hidden2,hidden3,hidden4) {
     document.getElementById(shown).style.display='block';
@@ -112,7 +127,7 @@ function Logout(){
 
 function editData(index){
     var editemail = prompt("Email", listUser[index].email);
-    var editname = prompt("Email", listUser[index].name);
+    var editname = prompt("Nama", listUser[index].name);
     var editpassword = prompt("Email", listUser[index].password);
     var r = confirm("Apakah anda yakin akan mengedit data ini?");
     if (r == true) {
