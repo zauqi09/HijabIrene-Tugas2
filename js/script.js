@@ -1,5 +1,9 @@
 var listSessionUser =[]
 var listAlbum=[]
+var currpage = 0
+var sizepage = 6
+var listpaginated=[]
+
 console.log("yang login = ", listSessionUser)
 var navActive = document.getElementsByClassName("navActive")[0]
 var thisNav = navActive.children.outerHTML
@@ -13,6 +17,9 @@ var status
 const default_password = "123"
 
 var init = function () {
+    
+    var tableheadAlbum = document.getElementsByClassName("tableDataAlbum")[0]
+    var headtable = tableheadAlbum.children[0].outerHTML
     if (listSessionUser.length==1) {
         thisNav = `<li class="nav-item ">
         <a class="nav-link active" href="#beranda" onclick="show('beranda','tentang','hubungi-kami','masuk','list-user','list-album'); ">Beranda
@@ -34,6 +41,12 @@ var init = function () {
             <a class="nav-link" href="#logout" onclick="Logout();window.alert('Anda telah logout!')">Logout</a>
         </li>
         `
+        
+        headtable =
+        `<tr>
+            <th style="width : 20px" scope="col">No</th>
+            <th scope="col">Judul Album</th>
+          </tr>`
     }
     else {
         thisNav =`<li class="nav-item ">
@@ -55,8 +68,16 @@ var init = function () {
         <li class="nav-item">
             <a class="nav-link" href="#daftar" onclick="show('daftar','hubungi-kami','tentang','beranda','masuk','list-album');">Daftar</a>
         </li>`
+        headtable =
+        `<tr>
+            <th style="width : 20px" scope="col">No</th>
+            <th scope="col">Judul Album</th>
+            <th scope="col">Pemilik</th>
+          </tr>`
     }
     navActive.innerHTML = thisNav
+    tableheadAlbum.innerHTML = headtable
+
 
     var btnContainer = document.getElementById("navBar");
 
@@ -71,11 +92,9 @@ var init = function () {
             this.children[0].className += " active";
         });
     }
-    showData()
-    showDataAlbum()
+    showData() 
+    showDataAlbum(currpage)  
 }
-
-
 function show(shown,hidden1,hidden2,hidden3,hidden4,hidden5) {
     document.getElementById(shown).style.display='block';
     document.getElementById(hidden1).style.display='none';
@@ -224,25 +243,73 @@ async function showData() {
 function filter() {
     var tableDataAlbum = document.getElementsByClassName("tableDataAlbum")[0]
     var search = document.getElementById("search-filter").value
+    var lowercase = search.toLowerCase();
     var tr = tableDataAlbum.children[0].children[0].outerHTML
     if (search==""){
-
+        showDataAlbum()
     }
     else {
-        var trisi = listAlbum.filter((album) => album.title == search).map((album,index)=> { 
-            return `<tr>
-            <th scope="row">${index + 1}</th>
-            <td>${album.title}</td>
-            <td>${album.name}</td>
-            </tr>`
-        })
+        if (listSessionUser.length==1){
+            listAlbum.forEach((data,index)=>{
+                var text = data.title
+                if (text.includes(lowercase) && data.userId==listAlbum[0].id){ 
+                    tr += `<tr>
+                    <th scope="row">${index + 1}</th>
+                    <td>${data.title}</td>
+                    </tr>`
+                }
+            })
+        }
+        else {
+            listAlbum.forEach((data,index)=>{
+                var text = data.title
+                if (text.includes(lowercase) && data.userId==listAlbum[0].id){ 
+                    tr +=  `<tr>
+                    <th scope="row">${index + 1}</th>
+                    <td>${data.title}</td>
+                    <td>${data.name}</td>
+                    </tr>`
+                }
+            })
+        }
+        tableDataAlbum.innerHTML = tr
     }
-    tableDataAlbum.innerHTML = tr + trisi.join("")
+    
 }
 
-async function showDataAlbum() {
-    //tampil data boy mantap jiwa
+function paginator(list, curpage, size) {
+	let page = curpage || 1,
+	perpage = size || 10,
+	offset = (page - 1) * perpage,
+	paginatedItems = list.slice(offset).slice(0, size),
+	totalpage = Math.ceil(list.length / perpage);
+
+	return {
+		page: page,
+		per_page: perpage,
+		pre_page: page - 1 ? page - 1 : null,
+		next_page: (totalpage > page) ? page + 1 : null,
+		total: list.length,
+		totalpage: totalpage,
+		data: paginatedItems
+	};
+}
+
+function pagination(){
+    var btn_next = document.getElementById("btn_next");
+    var btn_prev = document.getElementById("btn_prev");
+    listpaginated=paginator(listAlbum,currpage,sizepage)
     
+    btn_next.addEventListener("click", function() {
+        showDataAlbum(listpaginated.next_page)
+    })
+    btn_prev.addEventListener("click", function() {
+        showDataAlbum(listpaginated.pre_page)
+    })
+}
+
+async function showDataAlbum(currpage) {
+    //tampil data boy mantap jiwa
     var tableDataAlbum = document.getElementsByClassName("tableDataAlbum")[0]
     var tr = tableDataAlbum.children[0].children[0].outerHTML
     await fetch('https://jsonplaceholder.typicode.com/albums')
@@ -259,19 +326,19 @@ async function showDataAlbum() {
             albm.name=user.name
         }
     })
-
+    listpaginated=paginator(listAlbum,currpage,sizepage)
+    var page_span = document.getElementById("page")
     if (listSessionUser.length==1){
-        var trisi = listAlbum.filter((album) =>{ 
+        var trisi = listpaginated.data.filter((album) =>{ 
             return album.userId == listSessionUser[0].id; 
         }).map((album,index)=> { 
             return `<tr>
             <th scope="row">${index + 1}</th>
             <td>${album.title}</td>
-            <td>${album.name}</td>
             </tr>`
         }) 
     } else {
-        var trisi = listAlbum.map((album, index) => {
+        var trisi = listpaginated.data.map((album, index) => {
             return `
                     <tr>
                         <th scope="row">${index + 1}</th>
@@ -283,8 +350,9 @@ async function showDataAlbum() {
     
     // DOM manipulation
     tableDataAlbum.innerHTML = tr + trisi.join("")
+    page_span.innerHTML = listpaginated.page
 }
 
 init()
-
+pagination()
 
