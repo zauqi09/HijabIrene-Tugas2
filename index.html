@@ -13,7 +13,7 @@
     <script src="/js/script.js" defer></script>
     
   </head>
-<body onload="nav();">
+<body>
 
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm p-3 mb-5 bg-white">
@@ -260,7 +260,7 @@
               <div class="card-body">
                 <form action="index.html">
                   <div class="form-group">
-                    <input type="text" name="username" id="email-login" class="form-control" placeholder="Email">
+                    <input type="text" name="username" id="email-login" class="form-control" placeholder="Username">
                   </div>
                   <div class="form-group">
                     <input type="password" name="password" id="password-login" class="form-control" placeholder="Password">
@@ -288,7 +288,7 @@
                     <h2 class="title">Apakah kamu siap menjadi bagian dari kami?</h2>
             </div>
             <div class="col-sm-6 signup-form">
-                <form name="formJs" action="#">
+                <form class="formdaftar" action="#">
                     <div class="form-group">
                     <label for="email">Email</label>
                     <input class="form-control" type="text" name="email" id="email-daftar" placeholder="ex : zauqi09@gmail.com" required />
@@ -329,9 +329,9 @@
         <thead class="thead-dark">
           <tr>
             <th style="width : 20px" scope="col">No</th>
+            <th scope="col">Akun</th>
             <th scope="col">Email</th>
             <th scope="col">Nama</th>
-            <th scope="col">Password</th>
             <th scope="col">Aksi</th>
           </tr>
         </thead>
@@ -343,6 +343,29 @@
     </div>
     </div>
 
+    <!-- List Album -->
+    <div id="list-album" style="display:none">
+      <div class="container-fluid" style="margin-top: 140px;">
+        <div>
+          <input id="search-filter" type="text" placeholder="Cari..">
+        <button type="submit" onclick="filter()" class="btn btn-primary">Cari</button>
+        </div>
+        <h4>List Album</h4>
+      <table class="table tableDataAlbum">
+        <thead class="thead-dark">
+          <tr>
+            <th style="width : 20px" scope="col">No</th>
+            <th scope="col">Judul Album</th>
+            <th scope="col">Pemilik</th>
+          </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+        
+      </table>
+    </div>
+    </div>
 
 <!-- Kumpulan Script -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
